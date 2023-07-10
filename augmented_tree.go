@@ -3,8 +3,6 @@ package aabb
 import "strings"
 import "strconv"
 
-// TODO: implement "Remove" and full Space interface
-
 // An augmented tree only sorts by x, not y. This makes it decent for
 // side scrollers and similar platformers that have wide levels that
 // aren't insanely vertical. Among the positive properties, the boxes
@@ -205,7 +203,25 @@ func (self *AugmentedTree) recursiveEachCollision(node *augTreeNode, box Box, fn
 }
 
 func (self *AugmentedTree) EachInXRange(minX, maxX int, fn func(Box) SearchControl) {
-	panic("EachInXRange() unimplemented")
+	_ = self.recursiveEachInXRange(self.root, minX, maxX, fn)
+}
+
+func (self *AugmentedTree) recursiveEachInXRange(node *augTreeNode, minX, maxX int, fn func(Box) SearchControl) SearchControl {
+	if minX > node.GetMaxX() { return SearchContinue } // no possible collision in this sub-branch
+	if maxX >= node.Box.XMin() {
+		if fn(node.Box) == SearchStop { return SearchStop }
+	}
+
+	// check recursively on left and right branches
+	if node.Left != nil {
+		control := self.recursiveEachInXRange(node.Left, minX, maxX, fn)
+		if control == SearchStop { return SearchStop }
+	}
+	if node.Right != nil && maxX >= node.Box.XMin() {
+		control := self.recursiveEachInXRange(node.Right, minX, maxX, fn)
+		if control == SearchStop { return SearchStop }
+	}
+	return SearchContinue
 }
 
 // --- debug and testing methods ---

@@ -6,6 +6,8 @@ This package is not intended to offer general nor production-level solutions, bu
 - Help me understand the advantages, disadvantages and trade-offs between approaches by actually implementing and benchmarking them myself.
 - Serve as reference material whenever I need to deal with this in the real world.
 
+You can take a look at the [package documentation](https://pkg.go.dev/github.com/tinne26/aabb) if you want now that you understand what's the scope of the repository.
+
 ## Benchmarks
 
 Benchmarks executed using a decent CPU (AMD Ryzen 5) on an otherwise fairly average laptop. Results sorted from best to worst speed. A few prettified results are shown on the next subsections. Raw results are provided on the last subsection.
@@ -104,5 +106,3 @@ I started this before Golang got generics, so if you were to use any of the appr
 **Isn't the augmented tree terrible?**
 
 It only sorts by x and uses nodes and pointers instead of slices, so... selecting it as a general solution is a very poor idea, yeah. That being said, it also has some nice properties that aren't reflected directly on the speed benchmarks. Also, although I spent a few hours trying, I couldn't optimize it like other structures, so the implementation is fairly naive and basic. Certain variants can be optimized quite a lot, but the general version is annoying to tweak. You can also do sorting for x and y with more planes for a general solution (k-d trees), but I haven't been interested in writing and testing that yet.
-
-
